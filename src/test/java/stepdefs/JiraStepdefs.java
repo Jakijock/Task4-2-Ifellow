@@ -5,6 +5,7 @@ import io.cucumber.java.ru.Когда;
 import io.cucumber.java.ru.Тогда;
 import org.assertj.core.api.SoftAssertions;
 import service.*;
+import utils.ScreenshotMaker;
 
 import java.util.List;
 
@@ -20,27 +21,32 @@ public class JiraStepdefs {
     private BrowseProjectsService browseProjectsService = new BrowseProjectsService();
     private RapidBoardService rapidBoardService = new RapidBoardService();
     private TestInformationService testInformationService = new TestInformationService();
+    private final ScreenshotMaker screenshotMaker = new ScreenshotMaker();
 
     @Когда("^пользователь авторизирован")
     public void performAuthorization() {
         authorizationService.isAllRequiredFieldsAreVisible(softAssertions);
         authorizationService.performAuthorization("esirozh", "123Qwerty");
         authorizationService.getSignInButton().click();
+        screenshotMaker.makeScreenshot();
     }
 
     @И("^открыта домашняя страница")
     public void isHomePageOpen() {
         homePageService.isAllRequiredFieldsAreVisible(softAssertions);
+        screenshotMaker.makeScreenshot();
     }
 
     @Когда("^открыта страница с  проектами")
     public void openProjectPage() {
         homePageService.openBrowseProjectsPage();
+        screenshotMaker.makeScreenshot();
     }
 
     @И("^выбран проект")
     public void selectProject(String project) {
         browseProjectsService.selectProject(project);
+        screenshotMaker.makeScreenshot();
     }
 
     @Тогда("^сравниваем число задач с из количеством")
@@ -49,6 +55,7 @@ public class JiraStepdefs {
         Integer numberOfTasks = rapidBoardService.getNumberOfTasks();
         Integer numberOfTasksInList = rapidBoardService.getNumberOfTasksInLisy();
         assertTrue("Заявленное количество и количество задач в листе различны", numberOfTasks.equals(numberOfTasksInList));
+        screenshotMaker.makeScreenshot();
     }
 
     @Тогда("^выбираем задачу")
@@ -56,6 +63,7 @@ public class JiraStepdefs {
         rapidBoardService.openListOfTasks(softAssertions);
         rapidBoardService.showAllTasks();
         rapidBoardService.selectTest(task);
+        screenshotMaker.makeScreenshot();
     }
 
 
@@ -65,6 +73,7 @@ public class JiraStepdefs {
         String versionTest = rapidBoardService.getVersionValue(softAssertions);
         assertEquals("Ожидался статус задачи " + arg.get(1), statusTest, arg.get(1));
         assertEquals("Ожидалась версия " + arg.get(0), versionTest, arg.get(0));
+        screenshotMaker.makeScreenshot();
     }
 
     @И("^меняем статус задачи на ГОТОВО")
@@ -75,5 +84,6 @@ public class JiraStepdefs {
         Thread.sleep(3000);
         String statusTest = rapidBoardService.getStatusValue(softAssertions);
         assertEquals("Ожидался статус задачи \"ГОТОВО\"", "ГОТОВО", statusTest);
+        screenshotMaker.makeScreenshot();
     }
 }

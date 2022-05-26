@@ -1,5 +1,6 @@
 package service;
 
+import io.qameta.allure.Step;
 import org.assertj.core.api.SoftAssertions;
 import pages.AuthorizationPage;
 
@@ -19,7 +20,7 @@ public class AuthorizationService extends AuthorizationPage {
         getSignInButton().click();
     }
 
-    public void isAllRequiredFieldsAreVisible(SoftAssertions softAssertion){
+    public void isAllRequiredFieldsAreVisible(SoftAssertions softAssertion) {
         isVisible(softAssertion, getEmailInput(), "Email");
         isVisible(softAssertion, getPasswordInput(), "Password");
     }
